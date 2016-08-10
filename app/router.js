@@ -11,12 +11,12 @@ router.get('/', (req, res) => {
 // /your routes will go here
 router.route('/posts/:id')
   .get(Posts.getPost)
+  .put(Posts.updatePost)
   .delete(Posts.deletePost);
 
 
 router.route('/posts')
   .post(Posts.createPost)
-  .put(Posts.updatePost)
   .get(Posts.getPosts);
 
 
