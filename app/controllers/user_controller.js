@@ -11,6 +11,7 @@ export const signin = (req, res, next) => {
 export const signup = (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
+  const username = req.body.username;
 
   if (!email || !password) {
     return res.status(422).send('You must provide email and password');
@@ -24,13 +25,13 @@ export const signup = (req, res, next) => {
 // and then return a token same as you did in in signin
 
   User.find({ email }).then(response => {
-    res.status(422).send('already has an email');
-    return;
+    return res.status(422).send('already has an email');
   });
 
   const newUser = new User();
   newUser.email = email;
   newUser.password = password;
+  newUser.username = username;
   newUser.save()
   .then(result => {
     res.send({ token: tokenForUser(newUser) }); // return user token

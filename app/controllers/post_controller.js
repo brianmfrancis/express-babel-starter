@@ -13,6 +13,7 @@ export const createPost = (req, res) => {
   post.title = req.body.title;
   post.tags = req.body.tags;
   post.content = req.body.content;
+  post.author = req.user;
 
   post.save().then(result => {
     res.json({ message: 'Post created!' });
@@ -22,17 +23,21 @@ export const createPost = (req, res) => {
 };
 
 export const getPosts = (req, res) => {
-  Post.find().then(result => {
+  Post.find().
+  then(result => {
     res.json(cleanPosts(result));
-  }).catch(error => {
+  })
+  .catch(error => {
     res.json({ error });
   });
 };
 
 export const getPost = (req, res) => {
-  Post.findById(req.params.id).then(result => {
+  Post.findById(req.params.id).populate('author')
+  .then(result => {
     res.json(result);
-  }).catch(error => {
+  })
+  .catch(error => {
     res.json(error);
   });
 };
@@ -47,7 +52,7 @@ export const deletePost = (req, res) => {
 };
 
 export const updatePost = (req, res) => {
-  Post.findByIdAndUpdate(req.params.id, { title: req.body.title, tags: req.body.tags, content: req.body.content })
+  Post.findByIdAndUpdate(req.params.id, { title: req.body.title, tags: req.body.tags, content: req.body.content, author: req.user })
   .then(result => {
     res.json(result);
   }).catch(error => {
