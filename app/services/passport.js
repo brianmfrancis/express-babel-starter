@@ -11,7 +11,6 @@ import config from '../config';
 // not have separate ones
 const localOptions = { usernameField: 'email' };
 
-// options for jwt strategy
 // we'll pass in the jwt in an `authorization` header
 // so passport can find it there
 const jwtOptions = {
