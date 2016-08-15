@@ -25,22 +25,24 @@ export const signup = (req, res, next) => {
 // this is similar to how you created a Post
 // and then return a token same as you did in in signin
 
-  User.find({ email }).then(response => {
-    return res.status(422).send('already has an email');
+  User.findOne({ email }).then(response => {
+    if (response) {
+      return res.status(422).send('already has an email');
+    } else {
+      const newUser = new User();
+      newUser.email = email;
+      newUser.password = password;
+      newUser.username = username;
+      newUser.save()
+      .then(result => {
+        res.send({ token: tokenForUser(newUser) }); // return user token
+      })
+      .catch(err => {
+        res.json(err);
+      });
+      return undefined;
+    }
   });
-
-  const newUser = new User();
-  newUser.email = email;
-  newUser.password = password;
-  newUser.username = username;
-  newUser.save()
-  .then(result => {
-    res.send({ token: tokenForUser(newUser) }); // return user token
-  })
-  .catch(err => {
-    res.json(err);
-  });
-  return undefined;
 };
 
 function tokenForUser(user) {
